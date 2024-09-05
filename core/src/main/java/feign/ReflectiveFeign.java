@@ -46,25 +46,33 @@ public class ReflectiveFeign extends Feign {
   @SuppressWarnings("unchecked")
   @Override
   public <T> T newInstance(Target<T> target) {
+    // 方法名 映射 MethodHandler
     Map<String, MethodHandler> nameToHandler = targetToHandlersByName.apply(target);
+    // Method 映射  MethodHandler
     Map<Method, MethodHandler> methodToHandler = new LinkedHashMap<Method, MethodHandler>();
+    // todo 没细研究，没这么用过
     List<DefaultMethodHandler> defaultMethodHandlers = new LinkedList<DefaultMethodHandler>();
 
     for (Method method : target.type().getMethods()) {
       if (method.getDeclaringClass() == Object.class) {
         continue;
       } else if (Util.isDefault(method)) {
+        // 接口中的 default 方法 处理方法 todo 未细看
         DefaultMethodHandler handler = new DefaultMethodHandler(method);
         defaultMethodHandlers.add(handler);
         methodToHandler.put(method, handler);
       } else {
+        // 正常方法都是走这里
         methodToHandler.put(method, nameToHandler.get(Feign.configKey(target.type(), method)));
       }
     }
+    // 产生 InvocationHandler 对象
     InvocationHandler handler = factory.create(target, methodToHandler);
+    // 生成动态代理对象
     T proxy = (T) Proxy.newProxyInstance(target.type().getClassLoader(),
         new Class<?>[] {target.type()}, handler);
 
+    // todo 没有细看
     for (DefaultMethodHandler defaultMethodHandler : defaultMethodHandlers) {
       defaultMethodHandler.bindTo(proxy);
     }
@@ -120,6 +128,9 @@ public class ReflectiveFeign extends Feign {
     }
   }
 
+  /**
+   *  用于解析 MethodHandler 的组件
+   */
   static final class ParseHandlersByName {
 
     private final Contract contract;
@@ -148,7 +159,9 @@ public class ReflectiveFeign extends Feign {
     }
 
     public Map<String, MethodHandler> apply(Target target) {
+      // 解析方法原数据
       List<MethodMetadata> metadata = contract.parseAndValidateMetadata(target.type());
+      // 映射表
       Map<String, MethodHandler> result = new LinkedHashMap<String, MethodHandler>();
       for (MethodMetadata md : metadata) {
         BuildTemplateByResolvingArgs buildTemplate;

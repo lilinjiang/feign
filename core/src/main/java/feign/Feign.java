@@ -87,6 +87,7 @@ public abstract class Feign {
   }
 
   /**
+   * 返回 HTTP API 的新实例，该实例由 中的注释 Contract定义，用于指定的 target.您应该缓存此结果。
    * Returns a new instance of an HTTP API, defined by annotations in the {@link Feign Contract},
    * for the specified {@code target}. You should cache this result.
    */
@@ -206,12 +207,15 @@ public abstract class Feign {
     }
 
     public Feign build() {
+      // todo 没太细看具体干了什么
       super.enrich();
 
+      // 构建同步方法执行器工程
       SynchronousMethodHandler.Factory synchronousMethodHandlerFactory =
           new SynchronousMethodHandler.Factory(client, retryer, requestInterceptors,
               responseInterceptor, logger, logLevel, dismiss404, closeAfterDecode,
               propagationPolicy, forceDecoding);
+      // 用于解析 MethodHandler 的组件
       ParseHandlersByName handlersByName =
           new ParseHandlersByName(contract, options, encoder, decoder, queryMapEncoder,
               errorDecoder, synchronousMethodHandlerFactory);

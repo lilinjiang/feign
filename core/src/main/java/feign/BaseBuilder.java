@@ -46,6 +46,10 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> {
   protected QueryMapEncoder queryMapEncoder = new FieldQueryMapEncoder();
   protected ErrorDecoder errorDecoder = new ErrorDecoder.Default();
   protected Options options = new Options();
+
+  /**
+   * 用于生成InvocationHandler的工厂
+   */
   protected InvocationHandlerFactory invocationHandlerFactory =
       new InvocationHandlerFactory.Default();
   protected boolean dismiss404;

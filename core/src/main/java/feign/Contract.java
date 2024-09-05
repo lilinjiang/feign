@@ -32,6 +32,7 @@ import static feign.Util.checkState;
 import static feign.Util.emptyToNull;
 
 /**
+ * 定义哪些注释和值在接口上有效
  * Defines what annotations and values are valid on interfaces.
  */
 public interface Contract {
@@ -51,19 +52,28 @@ public interface Contract {
      */
     @Override
     public List<MethodMetadata> parseAndValidateMetadata(Class<?> targetType) {
+      // 接口不能有范型
       checkState(targetType.getTypeParameters().length == 0, "Parameterized types unsupported: %s",
           targetType.getSimpleName());
+      // 最多可以继承一个接口
       checkState(targetType.getInterfaces().length <= 1, "Only single inheritance supported: %s",
           targetType.getSimpleName());
+      // 结果列表
       final Map<String, MethodMetadata> result = new LinkedHashMap<String, MethodMetadata>();
+      // 循环被 @FeignClient 注释的接口中的方法
       for (final Method method : targetType.getMethods()) {
+        // Object 类中的方法不处理
         if (method.getDeclaringClass() == Object.class ||
+                // 静态方法不处理
             (method.getModifiers() & Modifier.STATIC) != 0 ||
+                // 接口中的  isDefault 方法不处理
             Util.isDefault(method)) {
           continue;
         }
+        // 解析与验证方法原数据
         final MethodMetadata metadata = parseAndValidateMetadata(targetType, method);
         if (result.containsKey(metadata.configKey())) {
+          // todo 应该是重复校验
           MethodMetadata existingMetadata = result.get(metadata.configKey());
           Type existingReturnType = existingMetadata.returnType();
           Type overridingReturnType = metadata.returnType();
@@ -91,24 +101,34 @@ public interface Contract {
      */
     protected MethodMetadata parseAndValidateMetadata(Class<?> targetType, Method method) {
       final MethodMetadata data = new MethodMetadata();
+      // 原接口Class 对象
       data.targetType(targetType);
+      // 方法
       data.method(method);
+      // 方法返回值类型
       data.returnType(
           Types.resolve(targetType, targetType, method.getGenericReturnType()));
+      // 配置key
       data.configKey(Feign.configKey(targetType, method));
       if (AlwaysEncodeBodyContract.class.isAssignableFrom(this.getClass())) {
         data.alwaysEncodeBody(true);
       }
 
+      // 处理类上的注解
       if (targetType.getInterfaces().length == 1) {
         processAnnotationOnClass(data, targetType.getInterfaces()[0]);
       }
+
+      // 处理类上的注解
       processAnnotationOnClass(data, targetType);
 
 
       for (final Annotation methodAnnotation : method.getAnnotations()) {
+        // 处理方法上的注解
         processAnnotationOnMethod(data, methodAnnotation, method);
       }
+
+      // todo 正常情况是false
       if (data.isIgnored()) {
         return data;
       }

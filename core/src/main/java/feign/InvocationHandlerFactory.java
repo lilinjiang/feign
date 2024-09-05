@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * 控制反射方法的调度。
  * Controls reflective method dispatch.
  */
 public interface InvocationHandlerFactory {
@@ -25,6 +26,7 @@ public interface InvocationHandlerFactory {
   InvocationHandler create(Target target, Map<Method, MethodHandler> dispatch);
 
   /**
+   * 方法处理器
    * Like {@link InvocationHandler#invoke(Object, java.lang.reflect.Method, Object[])}, except for a
    * single method.
    */

@@ -138,14 +138,15 @@ public class Util {
   }
 
   /**
+   * 接口中的 defualt 方法
    * Identifies a method as a default instance method.
    */
   public static boolean isDefault(Method method) {
     // Default methods are public non-abstract, non-synthetic, and non-static instance methods
-    // declared in an interface.
+    // declared in an interface.   -- 默认方法是在接口中声明的公共非抽象、非合成和非静态实例方法。
     // method.isDefault() is not sufficient for our usage as it does not check
     // for synthetic methods. As a result, it picks up overridden methods as well as actual default
-    // methods.
+    // methods.         --  method.isDefault()对于我们的使用来说是不够的，因为它不检查或合成方法。因此，它会选择被覆盖的方法以及实际的默认方法。
     final int SYNTHETIC = 0x00001000;
     return ((method.getModifiers()
         & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC | SYNTHETIC)) == Modifier.PUBLIC)
