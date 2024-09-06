@@ -205,6 +205,7 @@ public class Template {
   }
 
   /**
+   * 解析模板片段。
    * Parse a template fragment.
    *
    * @param fragment to parse
@@ -253,6 +254,7 @@ public class Template {
   }
 
   /**
+   * 将 Uri 拆分为存在于表达式内部和外部的 Chunk，由大括号 “{}” 分隔。嵌套表达式被视为文本，例如“foo{bar{baz}}”将被视为“foo， {bar{baz}}”。受 Apache CXF Jax-RS 的启发。
    * Splits a Uri into Chunks that exists inside and outside of an expression, delimited by curly
    * braces "{}". Nested expressions are treated as literals, for example "foo{bar{baz}}" will be
    * treated as "foo, {bar{baz}}". Inspired by Apache CXF Jax-RS.
