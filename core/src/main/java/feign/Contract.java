@@ -155,23 +155,29 @@ public interface Contract {
           isHttpAnnotation = processAnnotationsOnParameter(data, parameterAnnotations[i], i);
         }
 
+        // todo 如果是 HttpAnnotation 参数 这里进行记录下标
         if (isHttpAnnotation) {
           data.ignoreParamater(i);
         }
 
         if (parameterTypes[i] == URI.class) {
+          // 如果传递了 URI 对象 ,将标记URI对象
           data.urlIndex(i);
         } else if (!isHttpAnnotation
             && !Request.Options.class.isAssignableFrom(parameterTypes[i])) {
+          // 不属于 HttpAnnotation 参数 也不是 Request.Options 请求配置参数 走以下逻辑
           if (data.isAlreadyProcessed(i)) {
             checkState(data.formParams().isEmpty() || data.bodyIndex() == null,
                 "Body parameters cannot be used with form parameters.%s", data.warnings());
           } else if (!data.alwaysEncodeBody()) {
+            // body 传递 不能有表单参数
             checkState(data.formParams().isEmpty(),
                 "Body parameters cannot be used with form parameters.%s", data.warnings());
+            // body 参数只能有一个
             checkState(data.bodyIndex() == null,
                 "Method has too many Body parameters: %s%s", method, data.warnings());
             data.bodyIndex(i);
+            // body 参数的类型
             data.bodyType(
                 Types.resolve(targetType, targetType, genericParameterTypes[i]));
           }
@@ -181,12 +187,14 @@ public interface Contract {
       if (data.headerMapIndex() != null) {
         // check header map parameter for map type
         if (Map.class.isAssignableFrom(parameterTypes[data.headerMapIndex()])) {
+          // 检查 Map key 必须为String
           checkMapKeys("HeaderMap", genericParameterTypes[data.headerMapIndex()]);
         }
       }
 
       if (data.queryMapIndex() != null) {
         if (Map.class.isAssignableFrom(parameterTypes[data.queryMapIndex()])) {
+          // 检查 Map key 必须为String
           checkMapKeys("QueryMap", genericParameterTypes[data.queryMapIndex()]);
         }
       }
