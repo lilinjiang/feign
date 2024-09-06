@@ -30,12 +30,19 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
+ * Query String 参数的模板。
  * Template for a Query String parameter.
  */
 public final class QueryTemplate {
 
   private static final String UNDEF = "undef";
+  /**
+   * 参数值 可能是表达式
+   */
   private List<Template> values;
+  /**
+   * 参数名
+   */
   private final Template name;
   private final CollectionFormat collectionFormat;
   private boolean pure = false;
@@ -83,6 +90,7 @@ public final class QueryTemplate {
     }
 
     /* remove all empty values from the array */
+    // 从数组中删除所有空值
     Collection<String> remaining = StreamSupport.stream(values.spliterator(), false)
         .filter(Util::isNotBlank)
         .collect(Collectors.toList());
@@ -122,6 +130,7 @@ public final class QueryTemplate {
       Charset charset,
       CollectionFormat collectionFormat,
       boolean decodeSlash) {
+    // todo 为什么要用这个List接口的实现
     this.values = new CopyOnWriteArrayList<>();
     this.name = new Template(name, ExpansionOptions.ALLOW_UNRESOLVED, EncodingOptions.REQUIRED,
         !decodeSlash, charset);

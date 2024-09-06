@@ -108,9 +108,10 @@ public interface Contract {
       // 方法返回值类型
       data.returnType(
           Types.resolve(targetType, targetType, method.getGenericReturnType()));
-      // 配置key
+      // 配置key 例子:XXXFeign#methodName(ParamClassName)
       data.configKey(Feign.configKey(targetType, method));
       if (AlwaysEncodeBodyContract.class.isAssignableFrom(this.getClass())) {
+        // 如果当前 Contract Class 类型 等于 AlwaysEncodeBodyContract 或是 AlwaysEncodeBodyContract子类 设置此标识
         data.alwaysEncodeBody(true);
       }
 
@@ -132,17 +133,25 @@ public interface Contract {
       if (data.isIgnored()) {
         return data;
       }
+
+      // 检查 http method 是否有设置
       checkState(data.template().method() != null,
           "Method %s not annotated with HTTP method type (ex. GET, POST)%s",
           data.configKey(), data.warnings());
+
+      // 参数类型列表
       final Class<?>[] parameterTypes = method.getParameterTypes();
+
+      // 参数类型列表(带泛型)
       final Type[] genericParameterTypes = method.getGenericParameterTypes();
 
+      // 方法上的注解
       final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
       final int count = parameterAnnotations.length;
       for (int i = 0; i < count; i++) {
         boolean isHttpAnnotation = false;
         if (parameterAnnotations[i] != null) {
+          // 解析参数上的注解
           isHttpAnnotation = processAnnotationsOnParameter(data, parameterAnnotations[i], i);
         }
 

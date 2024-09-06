@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
+ * RFC 6570 定义的模板表达式的泛型表示，具有一些宽松的规则，允许在 URI 之外的区域使用概念。
  * A Generic representation of a Template Expression as defined by
  * <a href="https://tools.ietf.org/html/rfc6570">RFC 6570</a>, with some relaxed rules, allowing the
  * concept to be used in areas outside of the uri.
@@ -40,12 +41,13 @@ public class Template {
   private final List<TemplateChunk> templateChunks = new ArrayList<>();
 
   /**
+   * 创建一个新的模板
    * Create a new Template.
    *
-   * @param value of the template.
-   * @param allowUnresolved if unresolved expressions should remain.
-   * @param encode all values.
-   * @param encodeSlash if slash characters should be encoded.
+   * @param value of the template. (这里是参数名)
+   * @param allowUnresolved if unresolved expressions should remain. 如果未解析的表达式应保留。
+   * @param encode all values. 所有值
+   * @param encodeSlash if slash characters should be encoded. 是否应对斜杠字符进行编码。
    */
   Template(
       String value, ExpansionOptions allowUnresolved, EncodingOptions encode, boolean encodeSlash,
