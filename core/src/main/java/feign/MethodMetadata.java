@@ -43,6 +43,7 @@ public final class MethodMetadata implements Serializable {
   private final Map<Integer, Class<? extends Expander>> indexToExpanderClass =
       new LinkedHashMap<Integer, Class<? extends Expander>>();
   private final Map<Integer, Boolean> indexToEncoded = new LinkedHashMap<Integer, Boolean>();
+  // 在扩展时应用于 Headers、 RequestLine、 Body、POJO 字段或 bean 属性的命名模板参数
   private transient Map<Integer, Expander> indexToExpander;
   private BitSet parameterToIgnore = new BitSet();
   private boolean ignored;

@@ -183,6 +183,7 @@ public final class QueryTemplate {
   }
 
   /**
+   * 展开此模板。将删除未解析的变量。如果所有值都未解析，则结果为空字符串。
    * Expand this template. Unresolved variables are removed. If all values remain unresolved, the
    * result is an empty string.
    *

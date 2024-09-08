@@ -161,6 +161,7 @@ public final class RequestTemplate implements Serializable {
   }
 
   /**
+   * 使用提供的变量值替换解析所有表达式。变量值将进行 pct 编码（如果尚未编码）。
    * Resolve all expressions using the variable value substitutions provided. Variable values will
    * be pct-encoded, if they are not already.
    *
@@ -171,7 +172,8 @@ public final class RequestTemplate implements Serializable {
 
     StringBuilder uri = new StringBuilder();
 
-    /* create a new template form this one, but explicitly */
+    // todo 为什么要创建一个新的
+    /* create a new template form this one, but explicitly 创建这个模板的新模板，但是要显式地创建 */
     RequestTemplate resolved = RequestTemplate.from(this);
 
     if (this.uriTemplate == null) {
@@ -187,6 +189,7 @@ public final class RequestTemplate implements Serializable {
     /*
      * for simplicity, combine the queries into the uri and use the resulting uri to seed the
      * resolved template.
+     * 组装查询参数
      */
     if (!this.queries.isEmpty()) {
       /*
@@ -487,6 +490,7 @@ public final class RequestTemplate implements Serializable {
       return this;
     }
 
+    // 验证必须是绝对路径
     /* verify that the target contains the scheme, host and port */
     if (!UriUtils.isAbsolute(target)) {
       throw new IllegalArgumentException("target values must be absolute.");
@@ -501,6 +505,7 @@ public final class RequestTemplate implements Serializable {
       if (Util.isNotBlank(targetUri.getRawQuery())) {
         /*
          * target has a query string, we need to make sure that they are recorded as queries
+         * 包含查询字符串的处理
          */
         this.extractQueryTemplates(targetUri.getRawQuery(), true);
       }

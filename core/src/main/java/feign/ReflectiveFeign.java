@@ -224,13 +224,16 @@ public class ReflectiveFeign extends Feign {
 
     @Override
     public RequestTemplate create(Object[] argv) {
+      // 重新创建一个新的
       RequestTemplate mutable = RequestTemplate.from(metadata.template());
+      // @FeignClient的类型
       mutable.feignTarget(target);
       if (metadata.urlIndex() != null) {
         int urlIndex = metadata.urlIndex();
         checkArgument(argv[urlIndex] != null, "URI parameter %s was null", urlIndex);
         mutable.target(String.valueOf(argv[urlIndex]));
       }
+      //
       Map<String, Object> varBuilder = new LinkedHashMap<String, Object>();
       for (Entry<Integer, Collection<String>> entry : metadata.indexToName().entrySet()) {
         int i = entry.getKey();

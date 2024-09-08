@@ -83,7 +83,9 @@ final class SynchronousMethodHandler implements MethodHandler {
 
   @Override
   public Object invoke(Object[] argv) throws Throwable {
+    // 构建模板
     RequestTemplate template = buildTemplateFromArgs.create(argv);
+    // 支持参数传递配置 Options
     Options options = findOptions(argv);
     Retryer retryer = this.retryer.clone();
     while (true) {
@@ -109,6 +111,8 @@ final class SynchronousMethodHandler implements MethodHandler {
   }
 
   Object executeAndDecode(RequestTemplate template, Options options) throws Throwable {
+
+    // 触发请求拦截器
     Request request = targetRequest(template);
 
     if (logLevel != Logger.Level.NONE) {
@@ -164,6 +168,10 @@ final class SynchronousMethodHandler implements MethodHandler {
     return target.apply(template);
   }
 
+  /**
+   * 参数中若传递了配置采用参数中传递的，未传递取配置
+   * 优先级 方法参数传递 > 配置文件 > 默认配置
+   */
   Options findOptions(Object[] argv) {
     if (argv == null || argv.length == 0) {
       return this.options;
