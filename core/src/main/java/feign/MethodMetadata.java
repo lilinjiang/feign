@@ -23,9 +23,13 @@ import feign.Param.Expander;
 public final class MethodMetadata implements Serializable {
 
   private static final long serialVersionUID = 1L;
+  // 方法签名格式
   private String configKey;
+  // 方法返回值类型
   private transient Type returnType;
+  // 如果方法参数有 URI对象参数将是URI对象参数的下标
   private Integer urlIndex;
+  // 请求报文体的 下标
   private Integer bodyIndex;
   private Integer headerMapIndex;
   private Integer queryMapIndex;
@@ -33,6 +37,7 @@ public final class MethodMetadata implements Serializable {
   private transient Type bodyType;
   private final RequestTemplate template = new RequestTemplate();
   private final List<String> formParams = new ArrayList<String>();
+  // 参数下标与参数名的映射
   private final Map<Integer, Collection<String>> indexToName =
       new LinkedHashMap<Integer, Collection<String>>();
   private final Map<Integer, Class<? extends Expander>> indexToExpanderClass =

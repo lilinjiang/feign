@@ -27,16 +27,19 @@ import java.util.stream.Collectors;
 import static feign.Util.*;
 
 /**
+ * HTTP 目标的请求生成器
  * Request Builder for an HTTP Target.
  * <p>
  * This class is a variation on a UriTemplate, where, in addition to the uri, Headers and Query
  * information also support template expressions.
+ * 此类是 UriTemplate 的变体，其中，除了 uri 之外，Headers 和 Query 信息还支持模板表达式。
  * </p>
  */
 @SuppressWarnings("UnusedReturnValue")
 public final class RequestTemplate implements Serializable {
 
   private static final Pattern QUERY_STRING_PATTERN = Pattern.compile("(?<!\\{)\\?");
+  // QueryStringParam  的Map 集合 (Key 参数名 Value 该参数名的查询查询参数值模板)
   private final Map<String, QueryTemplate> queries = new LinkedHashMap<>();
   private final Map<String, HeaderTemplate> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   private String target;
@@ -622,11 +625,12 @@ public final class RequestTemplate implements Serializable {
   }
 
   /**
+   * 附加查询名称和值。
    * Appends the query name and values.
    *
-   * @param name of the parameter.
-   * @param values for the parameter, may be expressions.
-   * @param collectionFormat to use when resolving collection based query variables.
+   * @param name of the parameter. 参数名
+   * @param values for the parameter, may be expressions.  参数可以是表达式。
+   * @param collectionFormat to use when resolving collection based query variables. - 集合格式化器在解析基于集合的查询变量时使用。
    * @return a RequestTemplate for chaining.
    */
   private RequestTemplate appendQuery(String name,
@@ -634,11 +638,13 @@ public final class RequestTemplate implements Serializable {
                                       CollectionFormat collectionFormat) {
     if (!values.iterator().hasNext()) {
       /* empty value, clear the existing values */
+      // 如果没有值就直接从查询模板Map 删除该参数
       this.queries.remove(name);
       return this;
     }
 
     /* create a new query template out of the information here */
+    // 创建新的查询模板
     this.queries.compute(name, (key, queryTemplate) -> {
       if (queryTemplate == null) {
         return QueryTemplate.create(name, values, this.charset, collectionFormat, this.decodeSlash);
