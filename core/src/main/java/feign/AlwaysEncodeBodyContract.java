@@ -14,6 +14,7 @@
 package feign;
 
 /**
+ * DeclarativeContract 扩展，该扩展允许用户提供的自定义编码器仅使用请求模板和方法参数来定义请求消息负载，而不需要特定且唯一的 body 对象。
  * {@link DeclarativeContract} extension that allows user provided custom encoders to define the
  * request message payload using only the request template and the method parameters, not requiring
  * a specific and unique body object.

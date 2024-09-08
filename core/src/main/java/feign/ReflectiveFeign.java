@@ -166,9 +166,11 @@ public class ReflectiveFeign extends Feign {
       for (MethodMetadata md : metadata) {
         BuildTemplateByResolvingArgs buildTemplate;
         if (!md.formParams().isEmpty() && md.template().bodyTemplate() == null) {
+          // 目前除了 URL 参数 跟 @RequestPart 参数 其他应该没有在用
           buildTemplate =
               new BuildFormEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
         } else if (md.bodyIndex() != null || md.alwaysEncodeBody()) {
+          // 正常情况下 alwaysEncodeBody 是 false
           buildTemplate = new BuildEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
         } else {
           buildTemplate = new BuildTemplateByResolvingArgs(md, queryMapEncoder, target);
@@ -178,6 +180,7 @@ public class ReflectiveFeign extends Feign {
             throw new IllegalStateException(md.configKey() + " is not a method handled by feign");
           });
         } else {
+          // 创建 MethodHandler
           result.put(md.configKey(),
               factory.create(target, md, buildTemplate, options, decoder, errorDecoder));
         }
