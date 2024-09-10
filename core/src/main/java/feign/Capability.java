@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ *
+ * Capabilities 将 core feign artifacts 公开给 implementations，因此可以在构建 Client 端时自定义 core 的某些部分。
+ * 例如，功能采用 Client、对其进行更改并将修改后的版本反馈给 feign
  * Capabilities expose core feign artifacts to implementations so parts of core can be customized
  * around the time the client being built.
  *

@@ -108,7 +108,7 @@ public interface Contract {
       // 方法返回值类型
       data.returnType(
           Types.resolve(targetType, targetType, method.getGenericReturnType()));
-      // 配置key 例子:XXXFeign#methodName(ParamClassName)
+      // 配置key 例子: ConsumerFeignClient#add(Consumer)
       data.configKey(Feign.configKey(targetType, method));
       if (AlwaysEncodeBodyContract.class.isAssignableFrom(this.getClass())) {
         // 如果当前 Contract Class 类型 等于 AlwaysEncodeBodyContract 或是 AlwaysEncodeBodyContract子类 设置此标识

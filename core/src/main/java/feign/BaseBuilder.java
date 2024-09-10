@@ -233,6 +233,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> {
       return thisB;
     }
 
+    // 采用 Capability 对核心组件进行变更（变更核心组件内的配置，对核心组件进行包装，对核心组件进行代理）
     getFieldsToEnrich().forEach(field -> {
       field.setAccessible(true);
       try {

@@ -90,6 +90,7 @@ final class SynchronousMethodHandler implements MethodHandler {
     Retryer retryer = this.retryer.clone();
     while (true) {
       try {
+        // 请求最终在此发起
         return executeAndDecode(template, options);
       } catch (RetryableException e) {
         try {

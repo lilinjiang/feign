@@ -34,6 +34,7 @@ public final class MethodMetadata implements Serializable {
   private Integer headerMapIndex;
   private Integer queryMapIndex;
   private boolean alwaysEncodeBody;
+  //  请求报文体的Class类型
   private transient Type bodyType;
   private final RequestTemplate template = new RequestTemplate();
   private final List<String> formParams = new ArrayList<String>();

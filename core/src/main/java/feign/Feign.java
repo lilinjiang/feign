@@ -209,7 +209,7 @@ public abstract class Feign {
     }
 
     public Feign build() {
-      // todo 没太细看具体干了什么
+      // 采用 Capability 对核心组件进行变更
       super.enrich();
 
       // 构建同步方法执行器工程

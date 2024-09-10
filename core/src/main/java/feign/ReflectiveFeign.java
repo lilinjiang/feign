@@ -170,7 +170,7 @@ public class ReflectiveFeign extends Feign {
           buildTemplate =
               new BuildFormEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
         } else if (md.bodyIndex() != null || md.alwaysEncodeBody()) {
-          // 正常情况下 alwaysEncodeBody 是 false
+          // 正常情况下 alwaysEncodeBody 是 false  使用 @RequestBody bodyIndex != null todo 大多数是这个
           buildTemplate = new BuildEncodedTemplateFromArgs(md, encoder, queryMapEncoder, target);
         } else {
           buildTemplate = new BuildTemplateByResolvingArgs(md, queryMapEncoder, target);
